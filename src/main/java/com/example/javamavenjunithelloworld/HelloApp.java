@@ -37,11 +37,10 @@ public class HelloApp {
             System.exit(EXIT_STATUS_HELLO_FAILED);
         }
         hi.sayHello(System.out);
-        System.out.prinln("hello");
-        System.out.prinln("hello");
-System.out.prinln("hello");
-System.out.prinln("hello");
-
+         hi.sayHello(System.out);
+         hi.sayHello(System.out);
+         hi.sayHello(System.out);
+        
         
     }
 
