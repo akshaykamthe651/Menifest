@@ -1,5 +1,5 @@
 pipeline{
-        agent any
+        agent  any
         
         tools{
             git 'git'
@@ -20,6 +20,15 @@ pipeline{
                     sh 'mvn clean install -f pom.xml'
                     echo 'inside build'
                 }
+            }
+            stage('Code Quality'){
+                steps{
+                    withSonarQubeEnv('sonarqube'){
+                        sh 'mvn -f pom.xml sonar:sonar'
+                    }
+                    
+                }
+                
             }
         }
 }
