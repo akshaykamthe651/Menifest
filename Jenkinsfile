@@ -3,14 +3,14 @@ pipeline{
         
         tools{
             git 'git'
-            maven 'maven_home'
-            jdk 'java_home'
+            maven 'maven'
+            jdk 'java'
         }
         
         stages{
             stage('checkout'){
                 steps{
-                git credentialsId: '3cb54bc8-85c6-4f50-8d7a-29a670fe3e1f', url: 'https://github.com/akshaykamthe651/Tecton.git'
+                git 'https://github.com/laxapatiakshaylearning/cicdpipelinejenkins.git'
                 echo 'inside checkout'
                 }
             }
@@ -30,5 +30,33 @@ pipeline{
                 }
                 
             }
+            stage('Sonarqube') {
+    environment {
+        scannerHome = tool 'sonarscanner'
+       
+    }
+
+    steps {
+            withSonarQubeEnv(installationName: 'sonarqube',credentialsId: '519a31de-51c8-4cb6-9803-b0684513d2d2') {
+            sh '''  $scannerHome/bin/sonar-scanner \
+		        -Dsonar.passsword=admin \
+		        -Dsonar.projectKey=pipeline-1 \
+                -Dsonar.java.binaries=/var/lib/jenkins/workspace/pipeline1/target \
+                -Dsonar.host.url=http://54.227.123.185:9000/ \
+                -Dsonar.sources=/var/lib/jenkins/workspace/pipeline1/src '''
+                echo 'inside sonar scanner properties'
+            }
+            timeout(time: 10, unit: 'MINUTES') {
+            waitForQualityGate abortPipeline: true
+            echo 'inside sonar environment'
+            }
+        }
+    }
+        stage('docker stage'){
+            steps{
+            echo 'inside docker stage'
+            }
+        }
+        
         }
 }
